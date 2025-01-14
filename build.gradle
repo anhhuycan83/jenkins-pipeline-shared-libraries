@@ -1,0 +1,69 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'groovy'
+    id 'jacoco'
+}
+
+ext {
+    projectGroupId = 'fun.aipark.devops'
+    projectVersion = '1.0.0-SNAPSHOT'
+
+    junitVersion = '4.12'
+    hutoolVersion = '5.8.35'
+    groovyVersion = '2.4.14'
+    groovyCPSVersion = '1.31'
+    jenkinsPipelineUnitVersion = '1.14'
+}
+
+group = projectGroupId
+version = projectVersion
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+        outputDir file("$buildDir/classes/main")
+        testOutputDir file("$buildDir/classes/test")
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        csv.required = true
+    }
+}
+check.dependsOn jacocoTestReport, jacocoTestCoverageVerification
+
+repositories {
+    maven { url 'https://maven.aliyun.com/repository/public' }
+    maven { url 'https://repo.jenkins-ci.org/releases/' }
+    maven { url "https://repo.jenkins-ci.org/public/" }
+    mavenCentral()
+}
+
+dependencies {
+    implementation "cn.hutool:hutool-all:${hutoolVersion}"
+    implementation "com.cloudbees:groovy-cps:${groovyCPSVersion}"
+    implementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
+    implementation "org.json:json:20171018"
+    implementation group: 'io.jenkins.tools.bom', name: 'bom-2.387.x', version: '2543.vfb_1a_5fb_9496d', ext: 'pom'
+
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation "com.lesfurets:jenkins-pipeline-unit:${jenkinsPipelineUnitVersion}"
+}
+
+sourceSets {
+    main {
+        groovy { srcDirs += ['vars', 'src'] }
+        resources { srcDirs += 'resources' }
+    }
+    test {
+        groovy { srcDirs += 'test' }
+        resources { srcDirs += 'test/resources' }
+    }
+}
