@@ -52,6 +52,16 @@ dependencies {
     implementation "org.codehaus.groovy:groovy-all:${groovyVersion}"
     implementation "org.json:json:20171018"
     implementation group: 'io.jenkins.tools.bom', name: 'bom-2.387.x', version: '2543.vfb_1a_5fb_9496d', ext: 'pom'
+    // https://mvnrepository.com/artifact/org.jenkins-ci.main/jenkins-core
+    implementation group: 'org.jenkins-ci.main', name: 'jenkins-core', version: '2.387.3'
+    // https://mvnrepository.com/artifact/org.eclipse.hudson/hudson-core
+    implementation group: 'org.eclipse.hudson', name: 'hudson-core', version: '3.3.3'
+    implementation('org.eclipse.hudson:hudson-remoting') {
+        version {
+            strictly '3.0.2' // As 3.0.3 is having the issue
+        }
+    }
+
 
     testImplementation "junit:junit:${junitVersion}"
     testImplementation "com.lesfurets:jenkins-pipeline-unit:${jenkinsPipelineUnitVersion}"
